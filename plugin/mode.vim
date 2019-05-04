@@ -1,6 +1,7 @@
 " Author: Shaedil
 " Description: A plugin that allows you to change modes in vim. Requires
 " vim-plug
+" TODO: Create a functions that acts like 'plug#begin' for user inputed plugins
 
 " First, create a function/command that gives you a prompt asking you:
 " 'What filetype?' whose answer should activate other functions specific to 
@@ -16,28 +17,30 @@ endif
 let g:loaded_mode = 1
 " Check for vimplug
 if exists('g:loaded_plug')
-    finish
+    echo "You've not installed vim-plug! Modevim will not work"
 endif
 let g:loaded_plugplug = 1
 
+" The driver
 command Mode :execute ':call Mode("' . input("What filetype?: ") . '")'
-
-fun Mode(content)
-    if (a:content = 'java' || a:content = 'cpp')
-        :exe ':call OOPft()'
-    if (a:content = 'python' || a:content = 'vim')
-        :exe ':call FUNCft()'
-    if (a:content = 'latex' || a:content = 'html')
-        :exe ':call Txtft()'
-    else:
+" The filter
+fun Mode(filetype)
+    if (a:filetype == 'java') || (a:filetype == 'cpp')
+        :exec ':call OOPft()'
+    elseif (a:filetype == 'python') || (a:filetype == 'vim')
+        :exec ':call FUNCft()'
+    elseif (a:filetype == 'latex') || (a:filetype == 'html')
+        :exec ':call Txtft()'
+    else
         echo "That filetype isn't supported yet"
     endif
 endfun
 
 fun OOPft()
-    call plug#begin(~/Desktop/vim/vim81/plugged)
+    call plug#begin('~/Desktop/vim/vim81/plugged')
     Plug 'mbbill/undotree'
     Plug 'scrooloose/nerdtree'
+    echo " ... Mode initiated"
     call plug#end()
 endfun
 
@@ -46,14 +49,15 @@ fun FUNCft()
     if exists('g:NERDTreeToggle') && exists('g:UndotreeToggle')
         call feedkeys("\:q<CR>")
     endif
-    :exe ':colo solarized'
-    
+    :exec ':colo solarized'
+    echo " ... Mode initiated"
 endfun
 
 fun Txtft()
-    if exists('g:NERDTreeStatusline') && exists('g:UndotreeToggle')
+    if exists('g:NERDTreeToggle') && exists('g:UndotreeToggle')
         call feedkeys("\:q<CR>")
     endif
-    ;exe ':colo vintage'
-    :exe ':NERDTreeToggle'
-endfun
+    :exec ':colo vintage'
+    :exec ':NERDTreeToggle'
+    echom " ... Mode initiated"
+endfun 
