@@ -1,0 +1,7 @@
+*alamode.txt* Plugin for activating emacs-like 'modes'
+
+If you develop in a specific programming language, this plugin will try to
+enable plugins that you have already.
+
+                                                            *alamode-settings*
+This plugin currently has no settings.
